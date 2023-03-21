@@ -53,4 +53,9 @@ public class Sleep {
         this.calculatedTime = calculatedTime;
     }
 
+    @Override
+    public String toString() {
+        return "timeAwake " + this.timeAwake + " timeAsleep " + this.timeAsleep + " calculatedTime "
+                + this.calculatedTime;
+    }
 }
