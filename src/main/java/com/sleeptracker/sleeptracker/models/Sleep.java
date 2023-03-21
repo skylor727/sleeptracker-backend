@@ -1,12 +1,13 @@
 package com.sleeptracker.sleeptracker.models;
 
 import java.util.Date;
-import javax.persistence.*;
+import javax.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "sleep")
 public class Sleep {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
