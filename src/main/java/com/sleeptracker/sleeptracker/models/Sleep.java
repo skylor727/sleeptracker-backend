@@ -1,7 +1,10 @@
 package com.sleeptracker.sleeptracker.models;
 
-import java.util.Date;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -13,13 +16,16 @@ public class Sleep {
     private Long id;
 
     @Column(nullable = true)
-    private Date timeAsleep;
+    private String wakeUp;
+
+    @Column(nullable = false)
+    private String calculationChoice;
 
     @Column(nullable = true)
-    private Date timeAwake;
+    private String goToSleep;
 
     @Column(nullable = true)
-    private Date calculatedTime;
+    private String calculatedTime;
 
     public Long getId() {
         return this.id;
@@ -29,33 +35,48 @@ public class Sleep {
         this.id = id;
     }
 
-    public Date getTimeAsleep() {
-        return this.timeAsleep;
+    public String getwakeUp() {
+        return this.wakeUp;
     }
 
-    public void setTimeAsleep(Date timeAsleep) {
-        this.timeAsleep = timeAsleep;
+    public void setwakeUp(String wakeUp) {
+        this.wakeUp = wakeUp;
     }
 
-    public Date getTimeAwake() {
-        return this.timeAwake;
+    public String getgoToSleep() {
+        return this.goToSleep;
     }
 
-    public void setTimeAwake(Date timeAwake) {
-        this.timeAwake = timeAwake;
+    public void setgoToSleep(String goToSleep) {
+        this.goToSleep = goToSleep;
     }
 
-    public Date getCalculatedTime() {
+    public String getCalculatedTime() {
         return this.calculatedTime;
     }
 
-    public void setCalculatedTime(Date calculatedTime) {
+    public void setCalculatedTime(String calculatedTime) {
+        this.calculatedTime = calculatedTime;
+    }
+
+    public Sleep() {}
+
+
+    @JsonCreator
+    public Sleep(
+            @JsonProperty("calculationChoice") String calculationChoice,
+            @JsonProperty("goToSleep") String goToSleep,
+            @JsonProperty("wakeUp") String wakeUp,
+            @JsonProperty("calculatedTime") String calculatedTime) {
+        this.calculationChoice = calculationChoice;
+        this.goToSleep = goToSleep;
+        this.wakeUp = wakeUp;
         this.calculatedTime = calculatedTime;
     }
 
     @Override
     public String toString() {
-        return "timeAwake " + this.timeAwake + " timeAsleep " + this.timeAsleep + " calculatedTime "
+        return "goToSleep " + this.goToSleep + " wakeUp " + this.wakeUp + " calculatedTime "
                 + this.calculatedTime;
     }
 }

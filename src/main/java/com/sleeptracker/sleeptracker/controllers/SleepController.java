@@ -17,8 +17,7 @@ public class SleepController {
     public Sleep postMethodName(@RequestBody Sleep entity) {
         System.out.println(entity.toString());
         // TODO: process POST request
-        Sleep sleep = new Sleep();
-        sleepRepository.save(sleep);
+        sleepRepository.save(entity);
         return entity;
     }
 }
