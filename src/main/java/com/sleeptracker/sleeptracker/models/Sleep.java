@@ -2,7 +2,6 @@ package com.sleeptracker.sleeptracker.models;
 
 import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
@@ -14,13 +13,8 @@ public class Sleep {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    @JsonIgnore
-    private User user;
-
-    @Transient
-    private Long userId;
+    @Column(nullable = false)
+    private String userId;
 
     @Column(nullable = true)
     private String wakeUp;
@@ -34,11 +28,11 @@ public class Sleep {
     @Column(nullable = true)
     private String calculatedTime;
 
-    public Long getUserId() {
+    public String getUserId() {
         return this.userId;
     }
 
-    public void setUserId(Long userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
     }
 
@@ -48,10 +42,6 @@ public class Sleep {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public User getUser() {
-        return this.user;
     }
 
     public void setwakeUp(String wakeUp) {
@@ -83,7 +73,7 @@ public class Sleep {
 
     @JsonCreator
     public Sleep(
-            @JsonProperty("userId") Long userId,
+            @JsonProperty("userId") String userId,
             @JsonProperty("calculationChoice") String calculationChoice,
             @JsonProperty("goToSleep") String goToSleep,
             @JsonProperty("wakeUp") String wakeUp,
@@ -98,6 +88,6 @@ public class Sleep {
     @Override
     public String toString() {
         return "goToSleep " + this.goToSleep + " wakeUp " + this.wakeUp + " calculatedTime "
-                + this.calculatedTime;
+                + this.calculatedTime + " userid " + this.userId;
     }
 }
