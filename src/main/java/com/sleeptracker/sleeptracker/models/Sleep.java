@@ -1,6 +1,10 @@
 package com.sleeptracker.sleeptracker.models;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 import javax.persistence.Table;
+import org.hibernate.annotations.CreationTimestamp;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
@@ -27,6 +31,19 @@ public class Sleep {
 
     @Column(nullable = true)
     private String calculatedTime;
+
+    @CreationTimestamp
+    @Column(nullable = false, updatable = false)
+    private String createdAt;
+
+    public String getCreatedAt() {
+        return this.createdAt;
+    }
+
+    public void setCreatedAt(String createdAt) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("hh:mm a");
+        this.createdAt = LocalDateTime.now().format(formatter);
+    };
 
     public String getUserId() {
         return this.userId;
