@@ -16,6 +16,7 @@ public class SleepController {
     @PostMapping(value = "/sleep")
     public Sleep postMethodName(@RequestBody Sleep entity) {
         System.out.println(entity.toString());
+        entity.setCreatedAt();
         sleepRepository.save(entity);
         return entity;
     }

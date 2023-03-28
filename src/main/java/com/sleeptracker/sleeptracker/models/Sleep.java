@@ -32,7 +32,6 @@ public class Sleep {
     @Column(nullable = true)
     private String calculatedTime;
 
-    @CreationTimestamp
     @Column(nullable = false, updatable = false)
     private String createdAt;
 
@@ -40,8 +39,8 @@ public class Sleep {
         return this.createdAt;
     }
 
-    public void setCreatedAt(String createdAt) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("hh:mm a");
+    public void setCreatedAt() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
         this.createdAt = LocalDateTime.now().format(formatter);
     };
 
