@@ -17,7 +17,7 @@ public class Sleep {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "user_id")
     private String userId;
 
     @Column(nullable = true)
