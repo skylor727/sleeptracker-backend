@@ -41,7 +41,7 @@ public class SleepController {
                 return new ResponseEntity<>(HttpStatus.FORBIDDEN);
             }
             sleep.getNotes().add(note);
-
+            System.out.println(sleep);
             Sleep updatedSleep = sleepRepository.save(sleep);
             return new ResponseEntity<>(updatedSleep, HttpStatus.OK);
         } else {

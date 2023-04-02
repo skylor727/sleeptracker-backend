@@ -117,7 +117,8 @@ public class Sleep {
 
     @Override
     public String toString() {
+        String notesString = String.join(", ", this.notes);
         return "goToSleep " + this.goToSleep + " wakeUp " + this.wakeUp + " calculatedTime "
-                + this.calculatedTime + " userid " + this.userId;
+                + this.calculatedTime + " userid " + this.userId + " notes [" + notesString + "]";
     }
 }
