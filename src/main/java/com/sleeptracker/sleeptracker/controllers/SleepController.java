@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,10 +23,30 @@ public class SleepController {
 
     @PostMapping(value = "/sleep")
     public Sleep postMethodName(@RequestBody Sleep entity) {
-        System.out.println(entity.toString());
         entity.setCreatedAt();
         sleepRepository.save(entity);
         return entity;
+    }
+
+    @PostMapping(value = "/sleeps/{userId}/{sleepId}")
+    public ResponseEntity<Sleep> addNote(
+            @PathVariable String userId,
+            @PathVariable Long sleepId,
+            @RequestBody String note) {
+        Optional<Sleep> sleepOptional = sleepRepository.findById(sleepId);
+        if (sleepOptional.isPresent()) {
+            Sleep sleep = sleepOptional.get();
+
+            if (!userId.equals(sleep.getUserId())) {
+                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            }
+            sleep.getNotes().add(note);
+
+            Sleep updatedSleep = sleepRepository.save(sleep);
+            return new ResponseEntity<>(updatedSleep, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @GetMapping(value = "/sleeps/{userId}")
