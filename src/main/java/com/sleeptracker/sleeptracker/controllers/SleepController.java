@@ -6,6 +6,7 @@ import com.sleeptracker.sleeptracker.models.Sleep;
 import com.sleeptracker.sleeptracker.repositories.SleepRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,5 +30,10 @@ public class SleepController {
     @GetMapping(value = "/sleeps/{userId}")
     public List<Sleep> getSleepsByUserId(@PathVariable String userId) {
         return sleepRepository.findByUserId(userId);
+    }
+
+    @GetMapping(value = "/sleeps/{userId}/{sleepId}")
+    public Optional<Sleep> getSleepByID(@PathVariable String userId, @PathVariable Long sleepId) {
+        return sleepRepository.findById(sleepId);
     }
 }

@@ -2,6 +2,7 @@ package com.sleeptracker.sleeptracker.models;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 import javax.persistence.Table;
 import org.hibernate.annotations.CreationTimestamp;
@@ -34,6 +35,19 @@ public class Sleep {
 
     @Column(nullable = false, updatable = false)
     private String createdAt;
+
+    @ElementCollection
+    @CollectionTable(name = "sleep_notes", joinColumns = @JoinColumn(name = "sleep_id"))
+    @Column(name = "note")
+    private List<String> notes;
+
+    public List<String> getNotes() {
+        return this.notes;
+    }
+
+    public void setNotes(List<String> notes) {
+        this.notes = notes;
+    }
 
     public String getCreatedAt() {
         return this.createdAt;
