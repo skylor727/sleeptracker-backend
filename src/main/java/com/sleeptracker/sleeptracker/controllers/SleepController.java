@@ -84,4 +84,26 @@ public class SleepController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
+    @DeleteMapping(value = "/sleeps/{userId}/{sleepId}")
+    public ResponseEntity<Sleep> deleteSleep(
+            @PathVariable String userId,
+            @PathVariable Long sleepId) {
+        Optional<Sleep> sleepOptional = sleepRepository.findById(sleepId);
+
+        if (sleepOptional.isPresent()) {
+            Sleep sleep = sleepOptional.get();
+
+            if (!userId.equals(sleep.getUserId())) {
+                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            } else if (userId.equals(sleep.getUserId())) {
+                sleepRepository.deleteById(sleepId);
+                return new ResponseEntity<>(HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
 }
