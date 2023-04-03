@@ -5,7 +5,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.sleeptracker.sleeptracker.models.Sleep;
 import com.sleeptracker.sleeptracker.repositories.SleepRepository;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -98,6 +100,8 @@ public class SleepController {
                 return new ResponseEntity<>(HttpStatus.FORBIDDEN);
             } else if (userId.equals(sleep.getUserId())) {
                 sleepRepository.deleteById(sleepId);
+                Map<String, Boolean> response = new HashMap<>();
+                response.put("deleted", Boolean.TRUE);
                 return new ResponseEntity<>(HttpStatus.OK);
             } else {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
