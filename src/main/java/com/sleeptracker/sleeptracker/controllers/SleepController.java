@@ -60,7 +60,7 @@ public class SleepController {
         return sleepRepository.findById(sleepId);
     }
 
-    @DeleteMapping(value = "/sleeps/{userId}/{sleepId}/{noteIdx}")
+    @DeleteMapping(value = "/sleeps/{userId}/{sleepId}/{noteIndex}")
     public ResponseEntity<Sleep> deleteNote(
             @PathVariable String userId,
             @PathVariable Long sleepId,
