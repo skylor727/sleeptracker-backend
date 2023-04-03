@@ -11,6 +11,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -57,5 +58,30 @@ public class SleepController {
     @GetMapping(value = "/sleeps/{userId}/{sleepId}")
     public Optional<Sleep> getSleepByID(@PathVariable String userId, @PathVariable Long sleepId) {
         return sleepRepository.findById(sleepId);
+    }
+
+    @DeleteMapping(value = "/sleeps/{userId}/{sleepId}/{noteIdx}")
+    public ResponseEntity<Sleep> deleteNote(
+            @PathVariable String userId,
+            @PathVariable Long sleepId,
+            @PathVariable int noteIndex) {
+        Optional<Sleep> sleepOptional = sleepRepository.findById(sleepId);
+
+        if (sleepOptional.isPresent()) {
+            Sleep sleep = sleepOptional.get();
+
+            if (!userId.equals(sleep.getUserId())) {
+                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            }
+            if (noteIndex >= 0 && noteIndex < sleep.getNotes().size()) {
+                sleep.getNotes().remove(noteIndex);
+                Sleep updatedSleep = sleepRepository.save(sleep);
+                return new ResponseEntity<>(updatedSleep, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 }
