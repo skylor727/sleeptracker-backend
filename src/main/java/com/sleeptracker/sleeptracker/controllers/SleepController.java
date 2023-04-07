@@ -24,14 +24,14 @@ public class SleepController {
     @Autowired
     private SleepRepository sleepRepository;
 
-    @PostMapping(value = "/sleep")
+    @PostMapping(value = "/sleeps-api/sleep")
     public Sleep createSleep(@RequestBody Sleep entity) {
         entity.setCreatedAt();
         sleepRepository.save(entity);
         return entity;
     }
 
-    @PostMapping(value = "/sleeps/{userId}/{sleepId}")
+    @PostMapping(value = "/sleeps-api/sleeps/{userId}/{sleepId}")
     public ResponseEntity<Sleep> addNote(
             @PathVariable String userId,
             @PathVariable Long sleepId,
@@ -52,17 +52,17 @@ public class SleepController {
         }
     }
 
-    @GetMapping(value = "/sleeps/{userId}")
+    @GetMapping(value = "/sleeps-api/sleeps/{userId}")
     public List<Sleep> getSleepsByUserId(@PathVariable String userId) {
         return sleepRepository.findByUserId(userId);
     }
 
-    @GetMapping(value = "/sleeps/{userId}/{sleepId}")
+    @GetMapping(value = "/sleeps-api/sleeps/{userId}/{sleepId}")
     public Optional<Sleep> getSleepByID(@PathVariable String userId, @PathVariable Long sleepId) {
         return sleepRepository.findById(sleepId);
     }
 
-    @DeleteMapping(value = "/sleeps/{userId}/{sleepId}/{noteIndex}")
+    @DeleteMapping(value = "/sleeps-api/sleeps/{userId}/{sleepId}/{noteIndex}")
     public ResponseEntity<Sleep> deleteNote(
             @PathVariable String userId,
             @PathVariable Long sleepId,
@@ -87,7 +87,7 @@ public class SleepController {
         }
     }
 
-    @DeleteMapping(value = "/sleeps/{userId}/{sleepId}")
+    @DeleteMapping(value = "sleeps-api/sleeps/{userId}/{sleepId}")
     public ResponseEntity<Sleep> deleteSleep(
             @PathVariable String userId,
             @PathVariable Long sleepId) {
@@ -111,3 +111,4 @@ public class SleepController {
         }
     }
 }
+
