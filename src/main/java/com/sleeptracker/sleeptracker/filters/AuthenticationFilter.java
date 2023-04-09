@@ -29,12 +29,13 @@ public class AuthenticationFilter extends OncePerRequestFilter {
 
     private boolean isSessionValid(HttpServletRequest request) {
         String sessionToken = null;
-        String cookieName = "next-auth.session-token";
+        String cookieName1 = "__Secure-next-auth.session-token";
+        String cookieName2 = "next-auth.session-token";
 
         // Extract session token from the request cookies
         if (request.getCookies() != null) {
             for (Cookie cookie : request.getCookies()) {
-                if (cookie.getName().equals(cookieName)) {
+                if (cookie.getName().equals(cookieName1) || cookie.getName().equals(cookieName2)) {
                     sessionToken = cookie.getValue();
                     break;
                 }
