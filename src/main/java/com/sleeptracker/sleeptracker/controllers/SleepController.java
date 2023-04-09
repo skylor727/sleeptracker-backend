@@ -39,12 +39,10 @@ public class SleepController {
         Optional<Sleep> sleepOptional = sleepRepository.findById(sleepId);
         if (sleepOptional.isPresent()) {
             Sleep sleep = sleepOptional.get();
-
             if (!userId.equals(sleep.getUserId())) {
                 return new ResponseEntity<>(HttpStatus.FORBIDDEN);
             }
             sleep.getNotes().add(note);
-            System.out.println(sleep);
             Sleep updatedSleep = sleepRepository.save(sleep);
             return new ResponseEntity<>(updatedSleep, HttpStatus.OK);
         } else {

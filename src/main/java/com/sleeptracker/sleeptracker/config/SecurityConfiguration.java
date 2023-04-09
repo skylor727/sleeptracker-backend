@@ -17,10 +17,10 @@ public class SecurityConfiguration {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.cors().and()
+        http
                 .csrf().disable()
                 .authorizeRequests()
-                .requestMatchers(req -> req.getRequestURI().startsWith("/sleep-api/")).authenticated()
+                .requestMatchers(req -> req.getRequestURI().startsWith("/sleeps-api/")).authenticated()
                 .anyRequest().permitAll()
                 .and()
                 .addFilterBefore(authenticationFilter(), UsernamePasswordAuthenticationFilter.class);
