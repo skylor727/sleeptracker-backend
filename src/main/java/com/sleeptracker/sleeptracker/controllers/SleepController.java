@@ -1,7 +1,5 @@
 package com.sleeptracker.sleeptracker.controllers;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sleeptracker.sleeptracker.models.Sleep;
@@ -23,13 +21,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 public class SleepController {
-    Logger logger = LoggerFactory.getLogger(SleepController.class);
     @Autowired
     private SleepRepository sleepRepository;
 
     @PostMapping(value = "/sleeps-api/sleep")
     public Sleep createSleep(@RequestBody Sleep entity) {
-        logger.info("sleeps api sleep post");
         entity.setCreatedAt();
         sleepRepository.save(entity);
         return entity;
@@ -56,7 +52,6 @@ public class SleepController {
 
     @GetMapping(value = "/sleeps-api/sleeps/{userId}")
     public List<Sleep> getSleepsByUserId(@PathVariable String userId) {
-        logger.info("sleeps api get users sleeps");
         return sleepRepository.findByUserId(userId);
     }
 

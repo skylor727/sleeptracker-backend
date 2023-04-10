@@ -7,8 +7,6 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -17,7 +15,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class AuthenticationFilter extends OncePerRequestFilter {
-    Logger logger = LoggerFactory.getLogger(AuthenticationFilter.class);
     private SessionService sessionService;
 
     public void setSessionService(SessionService sessionService) {
@@ -28,8 +25,6 @@ public class AuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
         if (isSessionValid(request)) {
-            logger.info("session is valid request if block");
-
             // Get user by session token
             String sessionToken = getSessionToken(request);
             User user = sessionService.getUserBySessionToken(sessionToken);
@@ -41,7 +36,6 @@ public class AuthenticationFilter extends OncePerRequestFilter {
 
             filterChain.doFilter(request, response);
         } else {
-            logger.info("else block in internal filter");
             response.sendError(HttpServletResponse.SC_FORBIDDEN, "Forbidden");
         }
     }
@@ -65,7 +59,6 @@ public class AuthenticationFilter extends OncePerRequestFilter {
             for (Cookie cookie : request.getCookies()) {
                 if (cookie.getName().equals(cookieName1) || cookie.getName().equals(cookieName2)) {
                     sessionToken = cookie.getValue();
-                    logger.info(String.valueOf(cookie));
                     break;
                 }
             }

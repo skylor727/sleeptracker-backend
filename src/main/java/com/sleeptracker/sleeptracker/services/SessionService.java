@@ -1,8 +1,6 @@
 package com.sleeptracker.sleeptracker.services;
 
 import com.sleeptracker.sleeptracker.models.User;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -17,7 +15,6 @@ public class SessionService {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    Logger logger = LoggerFactory.getLogger(SessionService.class);
 
     private String getSessionTokenFromDatabase(String sessionToken) {
         String sql = "SELECT \"sessionToken\" FROM public.\"Session\" WHERE \"sessionToken\" = ?";
@@ -32,7 +29,6 @@ public class SessionService {
 
 
     public boolean isSessionValid(String sessionTokenFromCookie) {
-        logger.info("isSessionValid cookie" + sessionTokenFromCookie);
         String sessionToken = getSessionTokenFromDatabase(sessionTokenFromCookie);
 
         if (sessionToken != null) {
