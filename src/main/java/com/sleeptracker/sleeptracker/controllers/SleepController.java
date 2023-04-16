@@ -1,6 +1,6 @@
 package com.sleeptracker.sleeptracker.controllers;
 
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.sleeptracker.sleeptracker.models.Sleep;
 import com.sleeptracker.sleeptracker.repositories.SleepRepository;
@@ -13,25 +13,21 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
+@RequestMapping("/sleeps-api")
 public class SleepController {
     @Autowired
     private SleepRepository sleepRepository;
 
-    @PostMapping(value = "/sleeps-api/sleep")
+    @PostMapping(value = "/sleep")
     public Sleep createSleep(@RequestBody Sleep entity) {
         entity.setCreatedAt();
         sleepRepository.save(entity);
         return entity;
     }
 
-    @PostMapping(value = "/sleeps-api/sleeps/{userId}/{sleepId}")
+    @PostMapping(value = "/sleeps/{userId}/{sleepId}")
     public ResponseEntity<Sleep> addNote(
             @PathVariable String userId,
             @PathVariable Long sleepId,
@@ -50,17 +46,17 @@ public class SleepController {
         }
     }
 
-    @GetMapping(value = "/sleeps-api/sleeps/{userId}")
+    @GetMapping(value = "/sleeps/{userId}")
     public List<Sleep> getSleepsByUserId(@PathVariable String userId) {
         return sleepRepository.findByUserId(userId);
     }
 
-    @GetMapping(value = "/sleeps-api/sleeps/{userId}/{sleepId}")
+    @GetMapping(value = "/sleeps/{userId}/{sleepId}")
     public Optional<Sleep> getSleepByID(@PathVariable String userId, @PathVariable Long sleepId) {
         return sleepRepository.findById(sleepId);
     }
 
-    @DeleteMapping(value = "/sleeps-api/sleeps/{userId}/{sleepId}/{noteIndex}")
+    @DeleteMapping(value = "/sleeps/{userId}/{sleepId}/{noteIndex}")
     public ResponseEntity<Sleep> deleteNote(
             @PathVariable String userId,
             @PathVariable Long sleepId,
@@ -85,7 +81,7 @@ public class SleepController {
         }
     }
 
-    @DeleteMapping(value = "sleeps-api/sleeps/{userId}/{sleepId}")
+    @DeleteMapping(value = "/sleeps/{userId}/{sleepId}")
     public ResponseEntity<Sleep> deleteSleep(
             @PathVariable String userId,
             @PathVariable Long sleepId) {
@@ -96,13 +92,11 @@ public class SleepController {
 
             if (!userId.equals(sleep.getUserId())) {
                 return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-            } else if (userId.equals(sleep.getUserId())) {
+            } else {
                 sleepRepository.deleteById(sleepId);
                 Map<String, Boolean> response = new HashMap<>();
                 response.put("deleted", Boolean.TRUE);
                 return new ResponseEntity<>(HttpStatus.OK);
-            } else {
-                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
