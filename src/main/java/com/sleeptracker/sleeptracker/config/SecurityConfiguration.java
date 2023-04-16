@@ -29,7 +29,7 @@ public class SecurityConfiguration {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .requestMatchers(req -> req.getRequestURI().startsWith("/sleeps-api/")).authenticated()
+                .requestMatchers(req -> req.getRequestURI().startsWith("/sleeps-api/**")).authenticated()
                 .anyRequest().permitAll()
                 .and()
                 .addFilterBefore(authenticationFilter(), UsernamePasswordAuthenticationFilter.class);
