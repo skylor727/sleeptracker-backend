@@ -57,4 +57,22 @@ public class SessionService {
         }
         return null;
     }
+
+    public String getUserIdBySessionToken(String sessionToken) {
+        if (sessionToken != null) {
+            String sql = "SELECT u.\"id\" " +
+                    "FROM public.\"User\" u " +
+                    "JOIN public.\"Session\" s ON u.\"id\" = s.\"userId\" " +
+                    "WHERE s.\"sessionToken\" = ?";
+            RowMapper<String> rowMapper = new RowMapper<String>() {
+                @Override
+                public String mapRow(ResultSet resultSet, int rowNum) throws SQLException {
+                    return resultSet.getString("id");
+                }
+            };
+            return jdbcTemplate.queryForObject(sql, rowMapper, sessionToken);
+        }
+        return null;
+    }
+
 }
