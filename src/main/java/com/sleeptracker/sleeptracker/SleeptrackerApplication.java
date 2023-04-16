@@ -6,9 +6,10 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
 
 @PropertySources({
-    @PropertySource("classpath:application.properties"),
-    @PropertySource(value = "file:${user.dir}/.env", ignoreResourceNotFound = true)
+		@PropertySource("classpath:application.properties"),
+		@PropertySource(value = "file:${user.dir}/.env", ignoreResourceNotFound = true)
 })
+
 @SpringBootApplication
 public class SleeptrackerApplication {
 
