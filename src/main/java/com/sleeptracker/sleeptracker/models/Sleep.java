@@ -11,7 +11,7 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "sleep")
-public class Sleep {
+public class Sleep extends LoggableEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

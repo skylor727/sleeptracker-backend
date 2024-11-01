@@ -10,11 +10,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 @Service
-public class SessionService {
+public class SessionService implements AuthenticationService {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
-
 
     private String getSessionTokenFromDatabase(String sessionToken) {
         String sql = "SELECT \"sessionToken\" FROM public.\"Session\" WHERE \"sessionToken\" = ?";
@@ -27,52 +26,39 @@ public class SessionService {
         return jdbcTemplate.queryForObject(sql, rowMapper, sessionToken);
     }
 
-
+    @Override
     public boolean isSessionValid(String sessionTokenFromCookie) {
         String sessionToken = getSessionTokenFromDatabase(sessionTokenFromCookie);
-
-        if (sessionToken != null) {
-            return sessionTokenFromCookie.equals(sessionToken);
-        }
-        return false;
+        return sessionToken != null && sessionTokenFromCookie.equals(sessionToken);
     }
 
-
+    @Override
     public User getUserBySessionToken(String sessionToken) {
         if (sessionToken != null) {
             String sql = "SELECT u.\"id\", u.\"name\", u.\"email\" " +
                     "FROM public.\"User\" u " +
                     "JOIN public.\"Session\" s ON u.\"id\" = s.\"userId\" " +
                     "WHERE s.\"sessionToken\" = ?";
-            RowMapper<User> rowMapper = new RowMapper<User>() {
-                @Override
-                public User mapRow(ResultSet resultSet, int rowNum) throws SQLException {
-                    String id = resultSet.getString("id");
-                    String name = resultSet.getString("name");
-                    String email = resultSet.getString("email");
-                    return new User(id, name, email);
-                }
-            };
+            RowMapper<User> rowMapper = (resultSet, rowNum) -> new User(
+                    resultSet.getString("id"),
+                    resultSet.getString("name"),
+                    resultSet.getString("email")
+            );
             return jdbcTemplate.queryForObject(sql, rowMapper, sessionToken);
         }
         return null;
     }
 
+    @Override
     public String getUserIdBySessionToken(String sessionToken) {
         if (sessionToken != null) {
             String sql = "SELECT u.\"id\" " +
                     "FROM public.\"User\" u " +
                     "JOIN public.\"Session\" s ON u.\"id\" = s.\"userId\" " +
                     "WHERE s.\"sessionToken\" = ?";
-            RowMapper<String> rowMapper = new RowMapper<String>() {
-                @Override
-                public String mapRow(ResultSet resultSet, int rowNum) throws SQLException {
-                    return resultSet.getString("id");
-                }
-            };
+            RowMapper<String> rowMapper = (resultSet, rowNum) -> resultSet.getString("id");
             return jdbcTemplate.queryForObject(sql, rowMapper, sessionToken);
         }
         return null;
     }
-
 }

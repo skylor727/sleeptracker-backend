@@ -1,6 +1,6 @@
 package com.sleeptracker.sleeptracker.models;
 
-public class User {
+public class User extends LoggableEntity{
     String id;
     String name;
     String email;

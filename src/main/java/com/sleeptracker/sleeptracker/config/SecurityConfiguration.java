@@ -1,7 +1,7 @@
 package com.sleeptracker.sleeptracker.config;
 
 import com.sleeptracker.sleeptracker.filters.AuthenticationFilter;
-import com.sleeptracker.sleeptracker.services.SessionService;
+import com.sleeptracker.sleeptracker.services.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,7 +19,7 @@ import java.util.Arrays;
 public class SecurityConfiguration {
 
     @Autowired
-    private SessionService sessionService;
+    private AuthenticationService authenticationService; // Injecting the interface
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -38,9 +38,7 @@ public class SecurityConfiguration {
 
     @Bean
     public AuthenticationFilter authenticationFilter() {
-        AuthenticationFilter authenticationFilter = new AuthenticationFilter();
-        authenticationFilter.setSessionService(sessionService);
-        return authenticationFilter;
+        return new AuthenticationFilter(authenticationService); // Pass AuthenticationService to the filter
     }
 
     @Bean
@@ -54,5 +52,4 @@ public class SecurityConfiguration {
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
-
 }

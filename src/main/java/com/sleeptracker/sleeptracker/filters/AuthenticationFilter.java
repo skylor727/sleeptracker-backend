@@ -1,7 +1,7 @@
 package com.sleeptracker.sleeptracker.filters;
 
 import com.sleeptracker.sleeptracker.models.User;
-import com.sleeptracker.sleeptracker.services.SessionService;
+import com.sleeptracker.sleeptracker.services.AuthenticationService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
@@ -15,21 +15,19 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class AuthenticationFilter extends OncePerRequestFilter {
-    private SessionService sessionService;
+    private AuthenticationService authenticationService;
 
-    public void setSessionService(SessionService sessionService) {
-        this.sessionService = sessionService;
+    public AuthenticationFilter(AuthenticationService authenticationService) {
+        this.authenticationService = authenticationService;
     }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
         if (isSessionValid(request)) {
-            // Get user by session token
             String sessionToken = getSessionToken(request);
-            User user = sessionService.getUserBySessionToken(sessionToken);
+            User user = authenticationService.getUserBySessionToken(sessionToken);
 
-            // Set the user in the SecurityContextHolder
             UsernamePasswordAuthenticationToken authentication =
                     new UsernamePasswordAuthenticationToken(user, null, new ArrayList<>());
             SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -42,28 +40,16 @@ public class AuthenticationFilter extends OncePerRequestFilter {
 
     private boolean isSessionValid(HttpServletRequest request) {
         String sessionToken = getSessionToken(request);
-
-        if (sessionToken != null) {
-            return sessionService.isSessionValid(sessionToken);
-        }
-        return false;
+        return sessionToken != null && authenticationService.isSessionValid(sessionToken);
     }
 
     private String getSessionToken(HttpServletRequest request) {
-        String sessionToken = null;
-        String cookieName1 = "__Secure-next-auth.session-token";
-        String cookieName2 = "next-auth.session-token";
-
-        // Extract session token from the request cookies
-        if (request.getCookies() != null) {
-            for (Cookie cookie : request.getCookies()) {
-                if (cookie.getName().equals(cookieName1) || cookie.getName().equals(cookieName2)) {
-                    sessionToken = cookie.getValue();
-                    break;
-                }
+        for (Cookie cookie : request.getCookies()) {
+            if (cookie.getName().equals("__Secure-next-auth.session-token") ||
+                    cookie.getName().equals("next-auth.session-token")) {
+                return cookie.getValue();
             }
         }
-
-        return sessionToken;
+        return null;
     }
 }
