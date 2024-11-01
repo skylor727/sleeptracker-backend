@@ -44,12 +44,20 @@ public class AuthenticationFilter extends OncePerRequestFilter {
     }
 
     private String getSessionToken(HttpServletRequest request) {
+        if (request.getCookies() == null) {
+            return null;
+        }
+
+        String sessionToken = null;
+        String cookieName1 = "__Secure-next-auth.session-token";
+        String cookieName2 = "next-auth.session-token";
+
         for (Cookie cookie : request.getCookies()) {
-            if (cookie.getName().equals("__Secure-next-auth.session-token") ||
-                    cookie.getName().equals("next-auth.session-token")) {
-                return cookie.getValue();
+            if (cookie.getName().equals(cookieName1) || cookie.getName().equals(cookieName2)) {
+                sessionToken = cookie.getValue();
+                break;
             }
         }
-        return null;
+        return sessionToken;
     }
 }
