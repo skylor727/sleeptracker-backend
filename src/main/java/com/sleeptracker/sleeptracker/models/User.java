@@ -1,22 +1,39 @@
 package com.sleeptracker.sleeptracker.models;
 
-import javax.persistence.*;
+public class User extends LoggableEntity{
+    String id;
+    String name;
+    String email;
 
-@Entity
-@Table(name = "users")
-public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    public User(String id, String name, String email) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+    }
 
-    @Column(unique = true, nullable = false)
-    private String email;
+    public String getId() {
+        return id;
+    }
 
-    private String name;
+    public void setId(String id) {
+        this.id = id;
+    }
 
-    private String image;
+    public String getName() {
+        return name;
+    }
 
-    @Column(unique = true, nullable = false)
-    private String google_id;
-    // Getters and setters, and constructors if needed
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+
 }
